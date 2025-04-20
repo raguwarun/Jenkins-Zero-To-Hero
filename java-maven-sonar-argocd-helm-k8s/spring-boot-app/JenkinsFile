@@ -53,6 +53,7 @@ pipeline {
         steps {
             withCredentials([string(credentialsId: 'git-token', variable: 'GITHUB_TOKEN')]) {
                 sh '''
+                    git clone git@github.com:raguwarun/Jenkins-Zero-To-Hero.git
                     cd Jenkins-Zero-To-Hero
                     git init
                     git config user.email "raguwarun.reddy@yahoo.com"
