@@ -69,7 +69,6 @@ pipeline {
                     echo "Current directory in Update Deployment File stage:"
                     pwd
                     ls -ltr
-                    cd Jenkins-Zero-To-Hero
                     git config user.email "raguwarun.reddy@yahoo.com"
                     git config user.name "raguwarun"
                     BUILD_NUMBER=${BUILD_NUMBER}
