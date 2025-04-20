@@ -8,7 +8,13 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
+        sh 'echo "Current workspace before checkout:"'
+        sh 'pwd'
+        sh 'ls -ltr'
         git branch: 'main', url: 'https://github.com/raguwarun/Jenkins-Zero-To-Hero.git', credentialsId: 'git-token'
+        sh 'echo "Current workspace after checkout:"'
+        sh 'pwd'
+        sh 'ls -ltr'
       }
     }
     stage('Build and Test') {
@@ -52,6 +58,9 @@ pipeline {
         steps {
             withCredentials([string(credentialsId: 'git-token', variable: 'GITHUB_TOKEN')]) {
                 sh '''
+                    echo "Current directory in Update Deployment File stage:"
+                    pwd
+                    ls -ltr
                     cd Jenkins-Zero-To-Hero
                     git config user.email "raguwarun.reddy@yahoo.com"
                     git config user.name "raguwarun"
