@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     software-properties-common \
     unzip \
     openjdk-${JAVA_VERSION}-jdk-headless \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Stage 2: Maven installation
@@ -43,8 +44,8 @@ FROM ubuntu:latest
 
 ARG JAVA_VERSION=17
 
-# Install a minimal JRE - this often handles security configuration better
-RUN apt-get update && apt-get install -y --no-install-recommends openjdk-${JAVA_VERSION}-jre-headless \
+# Install a minimal JRE - this often handles security configuration better an GIT
+RUN apt-get update && apt-get install -y --no-install-recommends openjdk-${JAVA_VERSION}-jre-headless git \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-openjdk-amd64
