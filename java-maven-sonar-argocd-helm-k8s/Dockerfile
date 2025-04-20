@@ -1,21 +1,17 @@
-# Stage 1: Base image with essential build tools
-FROM ubuntu:latest AS base-builder
+# Stage 1: JDK for Maven build
+FROM ubuntu:latest AS maven-jdk-builder
+ENV JAVA_VERSION=17
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     gnupg \
     software-properties-common \
     unzip \
+    openjdk-${JAVA_VERSION}-jdk-headless \
     && rm -rf /var/lib/apt/lists/*
 
-# Stage 2: JDK installation
-FROM base-builder AS jdk-builder
-ENV JAVA_VERSION=17
-RUN apt-get update && apt-get install -y --no-install-recommends openjdk-${JAVA_VERSION}-jdk-headless \
-    && rm -rf /var/lib/apt/lists/*
-
-# Stage 3: Maven installation
-FROM base-builder AS maven-builder
+# Stage 2: Maven installation
+FROM maven-jdk-builder AS maven-builder
 ENV MAVEN_VERSION=3.9.9
 ENV MAVEN_HOME=/opt/maven
 ENV PATH=$MAVEN_HOME/bin:$PATH
@@ -24,7 +20,7 @@ RUN curl -fsSL https://downloads.apache.org/maven/maven-3/${MAVEN_VERSION}/binar
     && mv /opt/apache-maven-${MAVEN_VERSION} $MAVEN_HOME \
     && rm /tmp/maven.tar.gz
 
-# Stage 4: Docker installation
+# Stage 3: Docker installation
 FROM ubuntu:latest AS docker-builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -42,7 +38,7 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/d
 RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io \
     && rm -rf /var/lib/apt/lists/*
 
-# Stage 5: Final image - minimal with JRE, Maven, and Docker
+# Stage 4: Final image - minimal with JRE, Maven, and Docker
 FROM ubuntu:latest
 
 ARG JAVA_VERSION=17
