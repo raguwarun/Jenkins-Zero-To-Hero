@@ -52,6 +52,7 @@ pipeline {
         steps {
             withCredentials([string(credentialsId: 'git-token', variable: 'GITHUB_TOKEN')]) {
                 sh '''
+                    cd Jenkins-Zero-To-Hero
                     git config user.email "raguwarun.reddy@yahoo.com"
                     git config user.name "raguwarun"
                     BUILD_NUMBER=${BUILD_NUMBER}
